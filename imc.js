@@ -40,18 +40,21 @@ const data = [
   // Seleção de elementos
   const imcTable = document.querySelector("#imc-table");
   
-  const heightInput = document.querySelector("#height");
-  const weightInput = document.querySelector("#weight");
+  const heightInput = document.getElementById('height');
+  const weightInput = document.getElementById('weight')
   const calcBtn = document.querySelector("#calc-btn");
   const clearBtn = document.querySelector("#clear-btn");
   
-  const calcContainer = document.querySelector("#calc-container");
-  const resultContainer = document.querySelector("#result-container");
+  const calcContainer = document.getElementById("calc-container");
+  const resultContainer = document.getElementById("result-container");
   
   const imcNumber = document.querySelector("#imc-number span");
   const imcInfo = document.querySelector("#imc-info span");
   
   const backBtn = document.querySelector("#back-btn");
+
+  calcContainer.style.display = 'block'
+  resultContainer.style.display = 'none'
   
   // Funções
   function createTable(data) {
@@ -80,8 +83,8 @@ const data = [
     return text.replace(/[^0-9,]/g, "");
   }
   
-  function calcImc(height, weight) {
-    const imc = (weight / (height * height)).toFixed(1);
+  function calcImc(valor_altura, valor_peso) {
+    const imc = (valor_peso / ((valor_altura/100) * (valor_altura/100))).toFixed(2);
     return imc;
   }
   
@@ -93,27 +96,28 @@ const data = [
   }
   
   function showOrHideResults() {
-    calcContainer.classList.toggle("hide");
-    resultContainer.classList.toggle("hide");
+    if (calcContainer.style.display == 'block') {
+      calcContainer.style.display = 'none'
+    } else {
+      calcContainer.style.display = 'block'
+    }
+
+    if (resultContainer.style.display == 'flex') {
+      resultContainer.style.display = 'none'
+    } else {
+      resultContainer.style.display = 'flex'
+    }
   }
   
   // Init
   createTable(data);
   
-  // Eventos
-  [heightInput, weightInput].forEach((el) => {
-    el.addEventListener("input", (e) => {
-      const updatedValue = validDigits(e.target.value);
-  
-      e.target.value = updatedValue;
-    });
-  });
-  
+  // Eventos 
   calcBtn.addEventListener("click", (e) => {
     e.preventDefault();
-  
-    const weight = +weightInput.value.replace(",", ".");
-    const height = +heightInput.value.replace(",", ".");
+    
+    const weight = +weightInput.value;
+    const height = +heightInput.value;
   
     console.log(weight, height);
   
@@ -166,6 +170,6 @@ const data = [
   });
   
   backBtn.addEventListener("click", (e) => {
-    cleanInputs();
     showOrHideResults();
+    cleanInputs();
   });
